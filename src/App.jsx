@@ -3,6 +3,7 @@ import React, { useEffect } from "react"
 import reactLogo from './assets/react.svg'
 import './App.css'
 import axios from "axios";
+import { Select } from './UI/Select/Select';
 
 
 function App() {
@@ -11,7 +12,13 @@ function App() {
   const [charsArray, setCharsArray] = useState(0);
   const [platformsArray, setPlatformsArray] = useState({});
   const [gamesArray, setGamesArray] = useState({});
-  const [test, setTest] = useState();
+  const [foundGame, setFoundGame] = useState();
+
+  const platforms = [
+    'Playstation 5',
+    'Playstation 4',
+    'Nintendo Switch'
+  ]
 
   async function getCharachter(index){
 
@@ -28,19 +35,19 @@ function App() {
   async function getPlatfrom(index){
     const response = await axios.get('/platforms/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json')
     .then(res=>{
-      console.log(res.data.results[index])
-      setPlatformsArray(res.data.results)
-      console.log(platformsArray)
+      console.log(res.data.results)
+      //setPlatformsArray(res.data.results)
+      //console.log(platformsArray)
     }).catch(err=>{
       console.log(err)
     })
   }
 
   async function getGames(index){
-    const response = await axios.get('/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json')
+    const response = await axios.get('/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=2')
     .then(res=>{
       console.log(res.data.results[index])
-      setTest(res.data.results[index].name);
+      setFoundGame(res.data.results[index].name);
       setGamesArray(res.data.results)
       console.log(gamesArray)
     }).catch(err=>{
@@ -59,6 +66,7 @@ function App() {
   const onSubmit=(e)=>{
     e.preventDefault()
     getGames(charSearch)
+    getPlatfrom(1)
   }
 
 
@@ -79,8 +87,9 @@ function App() {
         <input onChange={e => setCharSearch(parseInt(e.target.value))} type="text" placeholder='0'/>
         <button type='onSubmit'>Сгенерировать</button>
       </form>
-      <p>{test}</p>
+      <p>{foundGame}</p>
 
+      <Select platforms={platforms}/>
     </div>
   )
 }
