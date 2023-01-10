@@ -16,16 +16,22 @@ function App() {
 
   const [select1, setSelect1] = useState();
 
-  const platforms = [
-    'Playstation 5',
-    'Playstation 4',
-    'Playstation 3',
-    'Playstation 2',
-    'Playstation',
-    'Nintendo Switch',
-    'Gameboy',
-    'Sega'
-  ]
+
+  const platforms = {
+    'Playstation 3': '35',
+    'Playstation 2': '19',
+    'Playstation': '22'
+  }
+  // const platforms = [
+  //   'Playstation 5',
+  //   'Playstation 4',
+  //   'Playstation 3', //35
+  //   'Playstation 2', //19
+  //   'Playstation', //22
+  //   'Nintendo Switch',
+  //   'Gameboy', //3
+  //   'Sega' //6
+  // ]
 
   const genre = [
     'Action',
@@ -50,7 +56,7 @@ function App() {
   }
 
   async function getPlatfrom(index){
-    const response = await axios.get('/platforms/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json')
+    const response = await axios.get('/platforms/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=1')
     .then(res=>{
       console.log(res.data.results)
       //setPlatformsArray(res.data.results)
@@ -70,6 +76,15 @@ function App() {
     }).catch(err=>{
       console.log(err)
     })
+  }
+
+  async function getGamesByPlatform(value){
+    const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&platforms=${value}`)
+    .then(res=>{
+      console.log(res.data.results)
+    }).catch(err=>{
+      console.log(err)
+    })
 
   }
 
@@ -83,7 +98,8 @@ function App() {
   const onSubmit=(e)=>{
     e.preventDefault()
     getGames(charSearch)
-    getPlatfrom(1)
+    //getPlatfrom(1)
+    getGamesByPlatform(select1);
   }
 
  function handlePlatform(platValue){
