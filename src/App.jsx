@@ -14,10 +14,27 @@ function App() {
   const [gamesArray, setGamesArray] = useState({});
   const [foundGame, setFoundGame] = useState();
 
+  const [select1, setSelect1] = useState();
+
   const platforms = [
     'Playstation 5',
     'Playstation 4',
-    'Nintendo Switch'
+    'Playstation 3',
+    'Playstation 2',
+    'Playstation',
+    'Nintendo Switch',
+    'Gameboy',
+    'Sega'
+  ]
+
+  const genre = [
+    'Action',
+    'Adnventure',
+    'Strategy',
+    'Simulation',
+    'Fighting',
+    'Shooter',
+    'Platformer'
   ]
 
   async function getCharachter(index){
@@ -69,27 +86,23 @@ function App() {
     getPlatfrom(1)
   }
 
-
-
-  // useEffect(function(){
-  //   getData();
-  // }, [])
-
-  // useEffect(function(){
-  //   getChar(charSearch)
-  // }, [charSearch])
-
+ function handlePlatform(platValue){
+    setSelect1(platValue);
+    console.log(platValue);
+ }
 
   return (
     <div className="App">
 
       <form action="submit" onSubmit={onSubmit}>
-        <input onChange={e => setCharSearch(parseInt(e.target.value))} type="text" placeholder='0'/>
+        {/* <input onChange={e => setCharSearch(parseInt(e.target.value))} type="text" placeholder='0'/> */}
+        <Select array={platforms} selectPlatform={handlePlatform}/>
+        {/* <Select array={genre}/> */}
+
         <button type='onSubmit'>Сгенерировать</button>
       </form>
       <p>{foundGame}</p>
 
-      <Select platforms={platforms}/>
     </div>
   )
 }
