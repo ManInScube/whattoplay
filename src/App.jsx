@@ -4,6 +4,8 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 import axios from "axios";
 import { Select } from './UI/Select/Select';
+import { CardList } from './CardList/CardList';
+
 
 
 function App() {
@@ -15,12 +17,22 @@ function App() {
   const [foundGame, setFoundGame] = useState();
 
   const [select1, setSelect1] = useState();
+  const [select2, setSelect2] = useState();
+
+
+  const [gamesList, setGamesList] = useState();
+  const [filtered, setFiltered] = useState();
 
 
   const platforms = {
     'Playstation 3': '35',
     'Playstation 2': '19',
     'Playstation': '22'
+  }
+
+  const year = {
+    "2006": "2006",
+    "2007": "2007"
   }
   // const platforms = [
   //   'Playstation 5',
@@ -66,40 +78,43 @@ function App() {
     })
   }
 
-  async function getGames(index){
-    const response = await axios.get('/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=2')
-    .then(res=>{
-      console.log(res.data.results[index])
-      setFoundGame(res.data.results[index].name);
-      setGamesArray(res.data.results)
-      console.log(gamesArray)
-    }).catch(err=>{
-      console.log(err)
-    })
-  }
+  // async function getGames(index){
+  //   const response = await axios.get('/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=2')
+  //   .then(res=>{
+  //     console.log(res.data.results[index])
+  //     setFoundGame(res.data.results[index].name);
+  //     setGamesArray(res.data.results)
+  //     console.log(gamesArray)
+  //   }).catch(err=>{
+  //     console.log(err)
+  //   })
+  // }
+
+
 
   async function getGamesByPlatform(value){
-    const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&platforms=${value}`)
+    const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&platforms=${value}`) //filter genre + itarate offset or get random offset
     .then(res=>{
       console.log(res.data.results)
+      setGamesList(res.data.results);
     }).catch(err=>{
       console.log(err)
     })
-
   }
 
-  function getChar(index){
-    if(charSearch!=null) return charsArray[index]
-    console.log(index)
-    return 0
+  // function filterByGenre(genre){
+  //   gamesList.filter((item)=>{
+  //     if(item.)
+  //   })
+  // }
 
-  }
+
 
   const onSubmit=(e)=>{
     e.preventDefault()
-    getGames(charSearch)
+    //getGames(charSearch)
     //getPlatfrom(1)
-    getGamesByPlatform(select1);
+    getGamesByPlatform(select1)
   }
 
  function handlePlatform(platValue){
@@ -107,17 +122,22 @@ function App() {
     console.log(platValue);
  }
 
+ function handleYear(platValue){
+  setSelect2(platValue);
+  console.log(platValue);
+}
+
   return (
     <div className="App">
-
       <form action="submit" onSubmit={onSubmit}>
         {/* <input onChange={e => setCharSearch(parseInt(e.target.value))} type="text" placeholder='0'/> */}
         <Select array={platforms} selectPlatform={handlePlatform}/>
         {/* <Select array={genre}/> */}
-
-        <button type='onSubmit'>Сгенерировать</button>
+        <Select array={year} selectPlatform={handleYear}/>
+        <button type='onSubmit' className='rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Сгенерировать</button>
       </form>
-      <p>{foundGame}</p>
+      {/* <p>{foundGame}</p> */}
+      <CardList list={gamesList}/>
 
     </div>
   )
