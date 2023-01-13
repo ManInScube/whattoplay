@@ -20,9 +20,10 @@ function App() {
   const [select2, setSelect2] = useState();
 
 
-  const [gamesList, setGamesList] = useState();
+  const [gamesList, setGamesList] = useState([]);
   const [filtered, setFiltered] = useState();
 
+  const offset = ["0", "1", "2"];
 
   const platforms = {
     'Playstation 3': '35',
@@ -78,38 +79,41 @@ function App() {
     })
   }
 
-  // async function getGames(index){
-  //   const response = await axios.get('/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=2')
-  //   .then(res=>{
-  //     console.log(res.data.results[index])
-  //     setFoundGame(res.data.results[index].name);
-  //     setGamesArray(res.data.results)
-  //     console.log(gamesArray)
-  //   }).catch(err=>{
-  //     console.log(err)
+  // async function getGamesByPlatform(value, selectYear){
+  //   let reses = [];
+  //   offset.forEach(async (item)=>{
+  //     const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=${item}&platforms=${value}`) //filter genre + itarate offset or get random offset
+  //     .then(res=>{
+  //       //console.log(res.data.results)
+  //       //setGamesList([...gamesList, res.data.results]);
+  //       reses.push(res.data.results)
+  //       console.log(reses)
+  //       //let filtered = res.data.results.filter(item=>item.original_release_date?.slice(0,4)==selectYear)
+  //       //
+  //       //setGamesList(filtered)
+        
+  //     }).catch(err=>{
+  //       console.log(err)
+  //     })
   //   })
   // }
 
+  async function getGamesByPlatform(value, selectYear=null){
+    
+      const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&platforms=${value}`) 
+      .then(res=>{
+        console.log(res.data.results)
+        let filtered = res.data.results.filter(item=>item.original_release_date?.slice(0,4)==selectYear)
+        selectYear==null ? setGamesList(res.data.results) : setGamesList(filtered)
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
 
-
-  async function getGamesByPlatform(value, selectYear){
-    const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&platforms=${value}`) //filter genre + itarate offset or get random offset
-    .then(res=>{
-      console.log(res.data.results)
-      //setGamesList(res.data.results);
-      let filtered = res.data.results.filter(item=>item.original_release_date?.slice(0,4)==selectYear)
-      //
-      setGamesList(filtered)
-      
-    }).catch(err=>{
-      console.log(err)
-    })
-  }
+  
 
   const onSubmit=(e)=>{
     e.preventDefault()
-    //getGames(charSearch)
-    //getPlatfrom(1)
     getGamesByPlatform(select1, select2)
   }
 
