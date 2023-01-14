@@ -109,6 +109,19 @@ function App() {
         console.log(err)
       })
     }
+//Date filters: &filter=field:start value|end value (using datetime format)
+
+  async function generateRandom(){
+    let random = Math.floor(Math.random() * (400 - 1) + 1)
+    console.log(random)
+    const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&filter=id:${random}`) 
+    .then(res=>{
+      console.log(res.data.results)
+      setGamesList(res.data.results)
+    }).catch(err=>{
+      console.log(err)
+    })
+  }
 
   
 
@@ -116,6 +129,11 @@ function App() {
     e.preventDefault()
     getGamesByPlatform(select1, select2)
   }
+
+  // const onSubmitRandom=(e)=>{
+  //   e.preventDefault()
+  //   generateRandom()
+  // }
 
  function handlePlatform(platValue){
     setSelect1(platValue);
@@ -134,6 +152,8 @@ function App() {
         <Select array={platforms} selectPlatform={handlePlatform}/>
         <Select array={year} selectPlatform={handleYear}/>
         <button type='onSubmit' className='rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Сгенерировать</button>
+        {/* <button type='onSubmitRandom' className='rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Generate Random</button> */}
+
       </form>
       
       <CardList list={gamesList}/>
