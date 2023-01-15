@@ -32,6 +32,9 @@ function App() {
   }
 
   const year = {
+    "1997": "1997",
+    "1998": "1998",
+    "1999": "1999",
     "2006": "2006",
     "2007": "2007",
   }
@@ -98,18 +101,19 @@ function App() {
   //   })
   // }
 
+
   async function getGamesByPlatform(value, selectYear=null){
     
-      const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&platforms=${value}`) 
+      const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&platforms=${value}`)   //&filter:original_release_date:${selectYear}-01-01|${selectYear}-12-12
       .then(res=>{
         console.log(res.data.results)
-        let filtered = res.data.results.filter(item=>item.original_release_date?.slice(0,4)==selectYear)
-        selectYear==null ? setGamesList(res.data.results) : setGamesList(filtered)
+        selectYear==null ? setGamesList(res.data.results) : setGamesList(res.data.results.filter(item=>item.original_release_date?.slice(0,4)==selectYear))
       }).catch(err=>{
         console.log(err)
       })
     }
-//Date filters: &filter=field:start value|end value (using datetime format)
+
+//Date filters: &filter=field:start value|end value (using datetime format) filter=original_release_date:1995-12-17|1999-12-17
 
   async function generateRandom(){
     let random = Math.floor(Math.random() * (400 - 1) + 1)
