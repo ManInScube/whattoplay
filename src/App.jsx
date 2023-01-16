@@ -7,28 +7,28 @@ import { Select } from './UI/Select/Select';
 import { CardList } from './CardList/CardList';
 
 
-
 function App() {
 
-  const [charSearch, setCharSearch] = useState(null);
-  const [charsArray, setCharsArray] = useState(0);
   const [platformsArray, setPlatformsArray] = useState({});
   const [gamesArray, setGamesArray] = useState({});
   const [foundGame, setFoundGame] = useState();
 
   const [select1, setSelect1] = useState();
   const [select2, setSelect2] = useState();
+  const [buttonCliked, setButtonCliked] = useState("filter");
 
 
   const [gamesList, setGamesList] = useState([]);
-  const [filtered, setFiltered] = useState();
 
   const offset = ["0", "1", "2"];
 
   const platforms = {
+    'Playstation 5': '176',
+    'Playstation 4': '146',
     'Playstation 3': '35',
     'Playstation 2': '19',
-    'Playstation': '22'
+    'Playstation': '22',
+    'Nintendo Switch': '157'
   }
 
   const year = {
@@ -58,18 +58,6 @@ function App() {
     'Shooter',
     'Platformer'
   ]
-
-  async function getCharachter(index){
-
-    const response =axios.get('/chars/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json')
-    .then(res=>{
-      console.log(res.data.results[index])
-      //setCharsArray(res.data.results)
-    }).catch(err=>{
-      console.log(err)
-    })
-
-  }
 
   async function getPlatfrom(index){
     const response = await axios.get('/platforms/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=1')
@@ -116,7 +104,7 @@ function App() {
 //Date filters: &filter=field:start value|end value (using datetime format) filter=original_release_date:1995-12-17|1999-12-17
 
   async function generateRandom(){
-    let random = Math.floor(Math.random() * (400 - 1) + 1)
+    let random = Math.floor(Math.random() * (82000 - 1) + 1)
     console.log(random)
     const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&filter=id:${random}`) 
     .then(res=>{
@@ -131,13 +119,9 @@ function App() {
 
   const onSubmit=(e)=>{
     e.preventDefault()
-    getGamesByPlatform(select1, select2)
+    buttonCliked=="filter" ? getGamesByPlatform(select1, select2) : generateRandom()
+    
   }
-
-  // const onSubmitRandom=(e)=>{
-  //   e.preventDefault()
-  //   generateRandom()
-  // }
 
  function handlePlatform(platValue){
     setSelect1(platValue);
@@ -149,15 +133,22 @@ function App() {
   console.log(platValue);
 }
 
+function getButtonClicked(value){
+  setButtonCliked(value);
+}
+
   return (
     <div className="App">
       <form action="submit" onSubmit={onSubmit}>
-        {/* <input onChange={e => setCharSearch(parseInt(e.target.value))} type="text" placeholder='0'/> */}
-        <Select array={platforms} selectPlatform={handlePlatform}/>
-        <Select array={year} selectPlatform={handleYear}/>
-        <button type='onSubmit' className='rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Сгенерировать</button>
-        {/* <button type='onSubmitRandom' className='rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Generate Random</button> */}
-
+        <div className='flex flex-row justify-start'>
+          <Select array={platforms} selectPlatform={handlePlatform}/>
+          <Select array={year} selectPlatform={handleYear}/>
+        </div>
+       <div className='flex flex-col justify-center mb-5'>
+          <button type='onSubmit' onClick={() => getButtonClicked("filter")} className='rounded-lg w-1/5 m-auto mb-10 border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Сгенерировать</button>
+          <button type='onSubmit' onClick={() => getButtonClicked("random")} className='rounded-lg w-1/5 m-auto border border-yellow-500 bg-yellow-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-yellow-700 hover:bg-yellow-700 focus:ring focus:ring-yellow-200 disabled:cursor-not-allowed disabled:border-yellow-300 disabled:bg-yellow-300'>Get Random Game</button>
+       </div>
+        
       </form>
       
       <CardList list={gamesList}/>
