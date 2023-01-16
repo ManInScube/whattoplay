@@ -9,11 +9,11 @@ export const Card = ({name,image, releaseDate, platforms}) =>{
             <div className="flex flex-row justify-center mb-2">
                 <img src={image} alt="" />
             </div>
-            <p className="text-sm text-primary-500">release date: {releaseDate}</p>
+            <p className="text-sm text-primary-500">release date: {releaseDate!=null ? releaseDate : "unknown"}</p>
             <p>
-            {platforms!=null && platforms.map((item,index)=>
-                <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600" key={index}>{item.abbreviation} </span>
-            )}
+                {platforms!=null && platforms.map((item,index)=>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600" key={index}>{item.abbreviation} </span>
+                )}
             </p>
         </div>
     )

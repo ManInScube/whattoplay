@@ -141,11 +141,11 @@ function getButtonClicked(value){
     <div className="App">
       <form action="submit" onSubmit={onSubmit}>
         <div className='flex flex-row justify-start'>
-          <Select array={platforms} selectPlatform={handlePlatform}/>
-          <Select array={year} selectPlatform={handleYear}/>
+          <Select name="platfrom" array={platforms} selectType={handlePlatform}/>
+          <Select name="year" array={year} selectType={handleYear}/>
         </div>
        <div className='flex flex-col justify-center mb-5'>
-          <button type='onSubmit' onClick={() => getButtonClicked("filter")} className='rounded-lg w-1/5 m-auto mb-10 border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Сгенерировать</button>
+          <button type='onSubmit' onClick={() => getButtonClicked("filter")} className='rounded-lg w-1/5 m-auto mb-10 border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Generate List</button>
           <button type='onSubmit' onClick={() => getButtonClicked("random")} className='rounded-lg w-1/5 m-auto border border-yellow-500 bg-yellow-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-yellow-700 hover:bg-yellow-700 focus:ring focus:ring-yellow-200 disabled:cursor-not-allowed disabled:border-yellow-300 disabled:bg-yellow-300'>Get Random Game</button>
        </div>
         
