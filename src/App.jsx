@@ -73,7 +73,6 @@ function App() {
     e.preventDefault()
     buttonCliked=="filter" ? getGamesByPlatform(select1, select2) : generateRandom()
     setOffset(100)
-
   }
 
   /**
@@ -96,12 +95,21 @@ function App() {
   //setOffset(0)
 }
 
+/**
+ * function checks which button is clicked to send proper request
+ * @param {string} value filter or random
+ */
 function getButtonClicked(value){
   setButtonCliked(value);
 }
 
+/**
+ * function managing pages navigation
+ * @param {string} value prev or next 
+ */
 function pageManager(value){
   value=="next" ? setOffset(offset+100) : setOffset(offset-100)
+  console.log(offset)
   getGamesByPlatform(select1, select2)
 }
 
@@ -113,22 +121,12 @@ function pageManager(value){
           <Select name="year" array={year} selectType={handleYear}/>
         </div>
        <div className='flex flex-col justify-center mb-5'>
-         { /*offset==0&&*/ <button type='onSubmit' onClick={() => getButtonClicked("filter")} className='rounded-lg w-1/5 m-auto mb-10 border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Generate List</button>} 
+          <button type='onSubmit' onClick={() => getButtonClicked("filter")} className='rounded-lg w-1/5 m-auto mb-10 border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-100 focus:ring focus:ring-gray-100 disabled:cursor-not-allowed disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400'>Generate List</button>
           <button type='onSubmit' onClick={() => getButtonClicked("random")} className='rounded-lg w-1/5 m-auto border border-yellow-500 bg-yellow-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-yellow-700 hover:bg-yellow-700 focus:ring focus:ring-yellow-200 disabled:cursor-not-allowed disabled:border-yellow-300 disabled:bg-yellow-300'>Get Random Game</button>
        </div>
-        
       </form>
-      
       <CardList list={gamesList}/>
-      {/* { pages > 1 && <a onClick={() => (pageManager("next"))} className="items-center cursor-pointer inline-flex space-x-2 rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-500 hover:bg-gray-50">
-          <span>Next</span>
-          <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
-          </svg>
-      </a> } */}
-
-      <PagesNav handler={pageManager} offset={offset} pages={pages}/>
-
+      {pages>1 && <PagesNav handler={pageManager} offset={offset} pages={pages}/>}
 
     </div>
   )
