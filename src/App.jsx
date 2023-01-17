@@ -2,12 +2,11 @@ import axios from "axios";
 import React, { useState } from "react";
 import './App.css';
 import { CardList } from './CardList/CardList';
+import { PagesNav } from './PagesNav/PagesNav';
 import { Select } from './UI/Select/Select';
 
 
 function App() {
-
-  const [platformsArray, setPlatformsArray] = useState({});
 
   const [select1, setSelect1] = useState();
   const [select2, setSelect2] = useState();
@@ -17,7 +16,7 @@ function App() {
 
   const [gamesList, setGamesList] = useState([]);
 
-  const [offset, setOffset] = useState();
+  const [offset, setOffset] = useState(0);
 
 
   const platforms = {
@@ -72,9 +71,9 @@ function App() {
 
   const onSubmit=(e)=>{
     e.preventDefault()
-    setOffset(0)
     buttonCliked=="filter" ? getGamesByPlatform(select1, select2) : generateRandom()
-    
+    setOffset(100)
+
   }
 
   /**
@@ -121,12 +120,16 @@ function pageManager(value){
       </form>
       
       <CardList list={gamesList}/>
-      { pages > 1 && <a onClick={() => (pageManager("next"))} className="items-center cursor-pointer inline-flex space-x-2 rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-500 hover:bg-gray-50">
+      {/* { pages > 1 && <a onClick={() => (pageManager("next"))} className="items-center cursor-pointer inline-flex space-x-2 rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-500 hover:bg-gray-50">
           <span>Next</span>
           <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
           </svg>
-      </a> }
+      </a> } */}
+
+      <PagesNav handler={pageManager} offset={offset} pages={pages}/>
+
+
     </div>
   )
 }
