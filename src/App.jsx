@@ -1,11 +1,8 @@
-import { useRef, useState } from 'react'
-import React, { useEffect } from "react"
-import reactLogo from './assets/react.svg'
-import './App.css'
 import axios from "axios";
-import { Select } from './UI/Select/Select';
+import React, { useState } from "react";
+import './App.css';
 import { CardList } from './CardList/CardList';
-import { Button } from './UI/Button/Button';
+import { Select } from './UI/Select/Select';
 
 
 function App() {
@@ -29,7 +26,8 @@ function App() {
     'Playstation 3': '35',
     'Playstation 2': '19',
     'Playstation': '22',
-    'Nintendo Switch': '157'
+    'Nintendo Switch': '157',
+    'SNES': '9'
   }
 
   const year = {
@@ -40,46 +38,11 @@ function App() {
     "2007": "2007",
   }
 
-  const genre = [
-    'Action',
-    'Adnventure',
-    'Strategy',
-    'Simulation',
-    'Fighting',
-    'Shooter',
-    'Platformer'
-  ]
-
-  async function getPlatfrom(index){
-    const response = await axios.get('/platforms/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=1')
-    .then(res=>{
-      console.log(res.data.results)
-      //setPlatformsArray(res.data.results)
-    }).catch(err=>{
-      console.log(err)
-    })
-  }
-
-  // async function getGamesByPlatform(value, selectYear){
-  //   let reses = [];
-  //   offset.forEach(async (item)=>{
-  //     const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&offset=${item}&platforms=${value}`) //filter genre + itarate offset or get random offset
-  //     .then(res=>{
-  //       //console.log(res.data.results)
-  //       //setGamesList([...gamesList, res.data.results]);
-  //       reses.push(res.data.results)
-  //       console.log(reses)
-  //       //let filtered = res.data.results.filter(item=>item.original_release_date?.slice(0,4)==selectYear)
-  //       //
-  //       //setGamesList(filtered)
-        
-  //     }).catch(err=>{
-  //       console.log(err)
-  //     })
-  //   })
-  // }
-
-
+  /**
+   * Function that request to API for games ust and sets data to gamesList
+   * @param {string} value id of platform
+   * @param {string} selectYear optional year value
+   */
   async function getGamesByPlatform(value, selectYear=null){
     
       const response = await axios.get(`/games/?api_key=b0527010c30e3356d5845bbf608b6df316d3f75a&format=json&field_list:id,name,image,original_release_date,platforms&offset=${offset}&platforms=${value}`)   //&filter:original_release_date:${selectYear}-01-01|${selectYear}-12-12
@@ -92,7 +55,9 @@ function App() {
       })
     }
 
-
+/**
+ * Random game generation function
+ */
   async function generateRandom(){
     let random = Math.floor(Math.random() * (82000 - 1) + 1)
     console.log(random)
@@ -112,15 +77,23 @@ function App() {
     
   }
 
+  /**
+   * Takes a platform value from Select component
+   * @param {string} platValue value of platform (id)
+   */
  function handlePlatform(platValue){
     setSelect1(platValue);
     console.log(platValue);
     //setOffset(0)
  }
 
- function handleYear(platValue){
-  setSelect2(platValue);
-  console.log(platValue);
+ /**
+  * Takes a year value from Select component
+  * @param {string} yearValue value of year
+  */
+ function handleYear(yearValue){
+  setSelect2(yearValue);
+  console.log(yearValue);
   //setOffset(0)
 }
 
@@ -128,13 +101,8 @@ function getButtonClicked(value){
   setButtonCliked(value);
 }
 
-function nextPage(){
-  setOffset(offset+100)
-  getGamesByPlatform(select1, select2)
-}
-
-function prevPage(){
-  setOffset(offset-100)
+function pageManager(value){
+  value=="next" ? setOffset(offset+100) : setOffset(offset-100)
   getGamesByPlatform(select1, select2)
 }
 
@@ -153,7 +121,7 @@ function prevPage(){
       </form>
       
       <CardList list={gamesList}/>
-      { pages > 1 && <a onClick={() => (nextPage())} className="items-cente inline-flex space-x-2 rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-500 hover:bg-gray-50">
+      { pages > 1 && <a onClick={() => (pageManager("next"))} className="items-center cursor-pointer inline-flex space-x-2 rounded-md border border-gray-300 bg-white px-4 py-2 font-medium text-gray-500 hover:bg-gray-50">
           <span>Next</span>
           <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
